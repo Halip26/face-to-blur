@@ -23,6 +23,10 @@ To run this:
     python blur_faces_video.py video.3gp
     ```
 
+## Output faces become blurred
+
+  ![father-and-daughter_blurred.jpg](output/father-and-daughter_blurred.jpg)
+
 ## Path prototxt model Caffe
 
 ```python
