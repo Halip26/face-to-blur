@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import sys
+import os
 
 # Jalur prototxt model Caffe
 prototxt_path = "weights/deploy.prototxt.txt"
@@ -11,11 +12,24 @@ model_path = "weights/res10_300x300_ssd_iter_140000_fp16.caffemodel"
 # memuat model Caffe
 model = cv2.dnn.readNetFromCaffe(prototxt_path, model_path)
 
-# dapatkan nama file gambar dari baris perintah
-image_file = sys.argv[1]
+# berikan jalur gambar sebagai argumen
+image_path = sys.argv[1]
 
-# membaca gambar yang diinginkan
-image = cv2.imread(image_file)
+output_directory = "output/"
+
+os.makedirs(output_directory, exist_ok=True)
+
+# Ekstrak nama file dari image_path
+filename = os.path.basename(image_path)
+
+# Memisahkan nama file dan ekstensi
+name, extension = os.path.splitext(filename)
+
+# Gabungkan direktori output & nama file yg ditambah akhiran "_blurred"
+output_image_path = os.path.join(output_directory, f"{name}_blurred{extension}")
+
+# memuat gambar yang akan diuji
+image = cv2.imread(image_path)
 
 # dapatkan lebar dan tinggi gambar
 h, w = image.shape[:2]
@@ -40,13 +54,14 @@ for i in range(0, output.shape[0]):
         # dapatkan koordinat kotak sekitarnya dan tingkatkan ukurannya ke gambar asli
         box = output[i, 3:7] * np.array([w, h, w, h])
         # ubah menjadi bilangan bulat
-        start_x, start_y, end_x, end_y = box.astype(np.int)
+        start_x, start_y, end_x, end_y = box.astype(np.int64)
         # dapatkan gambar wajah
         face = image[start_y:end_y, start_x:end_x]
         # terapkan gaussian blur ke wajah ini
         face = cv2.GaussianBlur(face, (kernel_width, kernel_height), 0)
         # masukkan wajah yang kabur ke gambar asli
         image[start_y:end_y, start_x:end_x] = face
-cv2.imshow("gambar", image)
+
+cv2.imshow("The results", image)
 cv2.waitKey(0)
-cv2.imwrite("gambar_diblur.jpg", image)
+cv2.imwrite(output_image_path, image)
