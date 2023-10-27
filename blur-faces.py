@@ -46,6 +46,7 @@ model.setInput(blob)
 
 # melakukan inferensi dan mendapatkan hasilnya
 output = np.squeeze(model.forward())
+# looping dgn parameters
 for i in range(0, output.shape[0]):
     face_accuracy = output[i, 2]
     # dapatkan tingkat akurasi wajah
