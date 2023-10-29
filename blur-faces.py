@@ -12,12 +12,15 @@ model_path = "weights/res10_300x300_ssd_iter_140000_fp16.caffemodel"
 # memuat model Caffe
 model = cv2.dnn.readNetFromCaffe(prototxt_path, model_path)
 
-# berikan jalur gambar sebagai argumen
+# berikan video path sebagai argumen
 image_path = sys.argv[1]
 
 output_directory = "output/"
 
 os.makedirs(output_directory, exist_ok=True)
+
+# memuat gambar yang akan diuji
+image = cv2.imread(image_path)
 
 # Ekstrak nama file dari image_path
 filename = os.path.basename(image_path)
@@ -27,9 +30,6 @@ name, extension = os.path.splitext(filename)
 
 # Gabungkan direktori output & nama file yg ditambah akhiran "_blurred"
 output_image_path = os.path.join(output_directory, f"{name}_blurred{extension}")
-
-# memuat gambar yang akan diuji
-image = cv2.imread(image_path)
 
 # dapatkan lebar dan tinggi gambar
 h, w = image.shape[:2]
