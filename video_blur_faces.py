@@ -23,12 +23,21 @@ os.makedirs(output_directory, exist_ok=True)
 # capture frames from video
 capture = cv2.VideoCapture(video_path)
 
-# it creates a four-character code (fourcc) used to specify the video codec.
+# Ekstrak nama file dari image_path
+filename = os.path.basename(video_path)
+
+# Memisahkan nama file dan ekstensi
+the_name, extension = os.path.splitext(filename)
+
+# it creates a four-character code (fourcc) used to specify the video codec
 fourcc = cv2.VideoWriter_fourcc(*"XVID")
 video, image = capture.read()
 print(image.shape)
 output_video_path = cv2.VideoWriter(
-    "output.avi", fourcc, 20.0, (image.shape[1], image.shape[0])
+    os.path.join(output_directory, f"{the_name}_blurred{extension}"),
+    fourcc,
+    20.0,
+    (image.shape[1], image.shape[0]),
 )
 
 while True:  # forever looping
