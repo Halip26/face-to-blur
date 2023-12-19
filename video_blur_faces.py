@@ -56,13 +56,21 @@ while True:  # forever looping
             # get the surrounding box cordinates and upscale them to original image
             box = output[i, 3:7] * np.array([w, h, w, h])
             # convert to integers
-            start_x, start_y, end_x, end_y = box.astype(np.int)
+            start_x, start_y, end_x, end_y = box.astype(np.int64)
             # get the face image
             face = image[start_y:end_y, start_x:end_x]
             # apply gaussian blur to this face
             face = cv2.GaussianBlur(face, (kernel_width, kernel_height), 0)
             # put the blurred face into the original image
             image[start_y:end_y, start_x:end_x] = face
+
+    # mengatur lebar & tinggi gambar di window
+    width = 480
+    height = 640
+
+    # mengatur ukuran jendela sesuai dengan gambar asli
+    cv2.namedWindow("The results", cv2.WINDOW_NORMAL)
+    cv2.resizeWindow("The results", width, height)
 
     # menampilkan hasilnya
     cv2.imshow("The results", image)

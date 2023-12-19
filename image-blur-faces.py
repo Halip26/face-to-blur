@@ -32,11 +32,11 @@ name, extension = os.path.splitext(filename)
 output_image_path = os.path.join(output_directory, f"{name}_blurred{extension}")
 
 # dapatkan lebar dan tinggi gambar
-h, w = image.shape[:2]
+height, width = image.shape[:2]
 
 # ukuran kernel gaussian blur tergantung pada lebar dan tinggi gambar asli
-kernel_width = (w // 7) | 1
-kernel_height = (h // 7) | 1
+kernel_width = (width // 7) | 1
+kernel_height = (height // 7) | 1
 
 # memproses gambar: mengubah ukuran dan melakukan pengurangan rata-rata
 blob = cv2.dnn.blobFromImage(image, 1.0, (300, 300), (104.0, 177.0, 123.0))
@@ -46,14 +46,15 @@ model.setInput(blob)
 
 # melakukan inferensi dan mendapatkan hasilnya
 output = np.squeeze(model.forward())
+
 # looping dgn parameters
 for i in range(0, output.shape[0]):
     face_accuracy = output[i, 2]
-    # dapatkan tingkat akurasi wajah
-    # jika akurasi wajah lebih dari 40%, maka buramkan kotak pembatas (wajah)
+    # get high akurasi wajah
+    # jika akurasi wajah lebih dari 40%, maka buramkan rectangle blur pembatas (wajah)
     if face_accuracy > 0.4:
-        # dapatkan koordinat kotak sekitarnya dan tingkatkan ukurannya ke gambar asli
-        box = output[i, 3:7] * np.array([w, h, w, h])
+        # dapatkan koordinat rectangle blur sekitarnya dan tingkatkan ukurannya ke gambar asli
+        box = output[i, 3:7] * np.array([width, height, width, height])
         # ubah menjadi bilangan bulat
         start_x, start_y, end_x, end_y = box.astype(np.int64)
         # dapatkan gambar wajah
@@ -62,6 +63,14 @@ for i in range(0, output.shape[0]):
         face = cv2.GaussianBlur(face, (kernel_width, kernel_height), 0)
         # masukkan wajah yang kabur ke gambar asli
         image[start_y:end_y, start_x:end_x] = face
+
+# mengatur lebar & tinggi gambar di window
+width = 1080
+height = 540
+
+# mengatur ukuran jendela sesuai dengan gambar asli
+cv2.namedWindow("The results", cv2.WINDOW_NORMAL)
+cv2.resizeWindow("The results", width, height)
 
 cv2.imshow("The results", image)
 cv2.waitKey(0)

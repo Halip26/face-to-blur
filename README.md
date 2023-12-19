@@ -65,7 +65,7 @@ This code is a simple face detection and blurring application using OpenCV. It d
 
 Please note that this code assumes the presence of the necessary model files and weights in the specified paths.
 
-## Output faces become blurred
+## The output image is blurred
 
   ![father-and-daughter_blurred.jpg](output/father-and-daughter_blurred.jpg)
 
