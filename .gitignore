@@ -4,6 +4,6 @@ __pycache__/
 
 images/
 
-*.mp4/
+*.mp4
 
-*.avi/
+*.avi
