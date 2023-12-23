@@ -34,7 +34,7 @@ fourcc = cv2.VideoWriter_fourcc(*"XVID")
 video, image = capture.read()
 print(image.shape)
 output_video_path = cv2.VideoWriter(
-    os.path.join(output_directory, f"{the_name}_blurred{extension}"),
+    os.path.join(output_directory, f"{the_name}_blurred.avi"),
     fourcc,
     20.0,
     (image.shape[1], image.shape[0]),
