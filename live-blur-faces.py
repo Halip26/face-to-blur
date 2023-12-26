@@ -29,7 +29,7 @@ while True:
     # lakukan inferensi dan dapatkan hasilnya
     output = np.squeeze(model.forward())
 
-    # looping untuk manggambar blur padaarea wajah
+    # loop terhadap wajah-wajah yang terdeteksi dan menerapkan efek blur
     for i in range(0, output.shape[0]):
         face_accuracy = output[i, 2]
         # dapatkan tingkat akurasi wajah
@@ -38,7 +38,7 @@ while True:
             # dapatkan koordinat kotak di sekitarnya dan tingkatkan ke gambar asli
             box = output[i, 3:7] * np.array([w, h, w, h])
             # ubah menjadi bilangan bulat
-            start_x, start_y, end_x, end_y = box.astype(np.int)
+            start_x, start_y, end_x, end_y = box.astype(np.int64)
             # dapatkan gambar wajah
             face = image[start_y:end_y, start_x:end_x]
             # terapkan gaussian blur ke wajah terdeteksi
